@@ -18,7 +18,7 @@ mongoose
       if (error) {
         console.log('Error starting the server:', error);
       } else {
-        console.log('Server started successfully!');
+        console.log('Server started successfully!!');
       }
     });
   })
