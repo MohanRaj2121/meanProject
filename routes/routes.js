@@ -1,10 +1,10 @@
 var express = require('express');
-
+//added new route to get specific details from given id
 const router = express.Router();
-var userController = require('../src/user/userController');
-router.route('/user/create').post(userController.createUserControllerFn);
-router.route('/user/getAll').get(userController.getDataConntrollerfn);
-
-router.route('/user/update/:id').patch(userController.updateUserController);
-router.route('/user/delete/:id').delete(userController.deleteUserController);
+var usersController = require('../src/users/usersController');
+router.route('/users').post(usersController.create);
+router.route('/users').get(usersController.get);
+router.route('/users/:id').get(usersController.get);
+router.route('/users/:id').patch(usersController.update);
+router.route('/users/:id').delete(usersController.expunge);
 module.exports = router;

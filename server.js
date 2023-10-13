@@ -12,7 +12,8 @@ mongoose
     console.log('DB Connected !!!!!!!!!!!');
     server.use(cors());
     server.use(express.json());
-    server.use(routes);
+    server.use(routes); 
+    
 
     server.listen(8000, (error) => {
       if (error) {
