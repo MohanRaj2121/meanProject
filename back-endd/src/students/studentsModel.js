@@ -1,9 +1,9 @@
 //model
 //coomment
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var userSchema = new Schema({
+let studentsSchema = new Schema({
 
     name: {
         type: String,
@@ -24,4 +24,4 @@ var userSchema = new Schema({
 
 });
 
-module.exports = mongoose.model('employees', userSchema);
+module.exports = mongoose.model('students', studentsSchema);

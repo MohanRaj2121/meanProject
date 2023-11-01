@@ -1,13 +1,15 @@
 // added routes
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { StudendcrudComponent } from './studendcrud/studendcrud.component';
+import { StudentcrudComponent } from './studentcrud/studentcrud.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 const routes: Routes = [
-  { path: 'users/new', component: StudendcrudComponent },
-  { path: 'users/:id/edit', component: StudendcrudComponent },
-  { path: 'users/:id', component: StudendcrudComponent },
-  { path: 'users', component: StudendcrudComponent },
-  { path: '', redirectTo: '/users', pathMatch: 'full' },
+  { path: 'welecome', component:WelcomeComponent},
+  { path: 'students/new', component: StudentcrudComponent },
+  { path: 'students/:id/edit', component: StudentcrudComponent },
+  { path: 'students/:id', component: StudentcrudComponent },
+  { path: 'students', component: StudentcrudComponent },
+  { path: '', redirectTo: '/students', pathMatch: 'full' },
 ];
 
 @NgModule({

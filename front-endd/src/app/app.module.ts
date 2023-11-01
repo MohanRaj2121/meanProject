@@ -3,12 +3,16 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { StudendcrudComponent } from './studendcrud/studendcrud.component';
+import { StudentcrudComponent } from './studentcrud/studentcrud.component';
 import { HttpClientModule } from '@angular/common/http';
+import { WelcomeComponent } from './welcome/welcome.component';
+
 @NgModule({
   declarations: [
     AppComponent,
-    StudendcrudComponent
+    StudentcrudComponent,
+    WelcomeComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -19,4 +23,6 @@ import { HttpClientModule } from '@angular/common/http';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  
+}
