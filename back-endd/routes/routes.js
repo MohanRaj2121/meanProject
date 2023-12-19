@@ -1,6 +1,7 @@
 let express = require('express');
 //added new route to get specific details from given id
 const router = express.Router();
+router.use(express.static('public'));
 var studentsController = require('../src/students/studentsController');
 router.route('/students').post(studentsController.create);
 router.route('/students').get(studentsController.get);

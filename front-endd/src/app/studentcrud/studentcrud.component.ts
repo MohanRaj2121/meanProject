@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-const API_URL = 'http://localhost:8000/students'; 
+import { io, Socket } from 'socket.io-client';
+
+const API_URL = 'http://localhost:8080/students'; 
 
 @Component({
   selector: 'app-studentcrud', 
@@ -9,7 +11,7 @@ const API_URL = 'http://localhost:8000/students';
   styleUrls: ['./studentcrud.component.scss']
 })
 export class StudentcrudComponent implements OnInit {
-  page: number = 1;
+  page: number = 5;//cmmentggi
   pageSize: number = 10;
   StudentArray: any[] = [];
   currentStudentID = '';
@@ -20,10 +22,21 @@ export class StudentcrudComponent implements OnInit {
   phone: string = '';
 
   showForm: boolean = false;
+  private socket!: Socket;
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {
+    this.socket = io('http://localhost:8080/students', {
+      transports: ['websocket'],
+    });
+  }
 
   ngOnInit(): void {
+
+    this.socket.on('todo_updated', () => {
+      console.log('Received todo_updated event');
+      this.getAllStudent();
+    });
+
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id && !this.router.url.includes('edit')) {
@@ -75,6 +88,7 @@ export class StudentcrudComponent implements OnInit {
         alert('Data Updated');
         this.showForm = false;
         this.getAllStudent();
+        this.socket.emit('studentUpdated');
       });
     } else {
       const apiUrl = API_URL;
@@ -83,6 +97,8 @@ export class StudentcrudComponent implements OnInit {
         alert('Data Created');
         this.showForm = false;
         this.getAllStudent();
+        this.socket.emit('studentUpdated');
+          console.log('Emitted studentUpdated event');
       });
     }
   }
@@ -132,31 +148,45 @@ export class StudentcrudComponent implements OnInit {
     });
   }
 
-  save() {
+  save(eventData: any) {
+    const bodyData = {
+      name: eventData.name,
+      email: eventData.email,
+      address: eventData.address,
+      phone: eventData.phone,
+    };
+
     if (this.currentStudentID === '') {
-      this.register();
+      const apiUrl =  API_URL;
+      this.http.post(apiUrl, bodyData).subscribe((resultData: any) => {
+        console.log(resultData);
+        alert('Registered Successfully');
+        this.showForm = false;
+        this.name = '';
+        this.address = '';
+        this.email = '';
+        this.phone = '';
+        this.socket.emit('Data saved');
+        this.getAllStudent();
+      });
     } else {
-      this.UpdateRecords();
+      const apiUrl = `${API_URL}/${this.currentStudentID}`;
+      this.http.patch(apiUrl, bodyData).subscribe((resultData: any) => {
+        console.log(resultData);
+        alert('Data Updated');
+        this.showForm = false;
+        this.socket.emit('Data saved');
+        this.getAllStudent();
+      });
     }
   }
 
-  register() {
-    let bodyData = {
-      name: this.name,
-      email: this.email,
-      address: this.address,
-      phone: this.phone,
-    };
-
-    this.http.post(API_URL, bodyData).subscribe((resultData: any) => {
-      console.log(resultData);
-      alert('Registered Successfully');
-      this.showForm = false;
-      this.name = '';
-      this.email = '';
-      this.address = '';
-      this.phone = '';
-      this.getAllStudent();
-    });
+  resetForm() {
+    this.name = '';
+    this.email = '';
+    this.address= '';
+    this.phone = '';
+    this.currentStudentID = '';
+    this.showForm = false;
   }
 }
